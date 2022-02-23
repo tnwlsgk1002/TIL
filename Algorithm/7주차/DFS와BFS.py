@@ -34,3 +34,4 @@ def bfs(graph, start_node) :
 
 print(*dfs(graph, V))
 print(*bfs(graph, V))
+

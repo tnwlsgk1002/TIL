@@ -1,16 +1,8 @@
-# test05
+# test05 : 컨테이너 위젯 되짚어보기
 
-A new Flutter project.
+- `Container` 위젯의 child가 있고 없음의 차이
+- `Container`의 `Margin`은 위젯의 바깥쪽 간격을 조절, `Padding`은 위젯의 안쪽 간격을 조절
+- 또한 `Container`는 단일 `child`를 가짐
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 결과 화면
+![img.png](img.png)

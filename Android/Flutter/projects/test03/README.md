@@ -1,16 +1,21 @@
-# test03
+# test03 : Flutter - AppBar
 
-A new Flutter project.
+- AbbBar 메뉴 아이콘 추가하기
 
-## Getting Started
+## 설명
+- `leading` : 아이콘 버튼이나 간단한 위젯을 왼쪽에 배치할 때
+- `actions` : 복수의 아이콘 버튼 등을 오른쪽에 배치할 때
+- `onPressed` : 함수의 형태로 일반 버튼이나 아이콘 버튼을 터치했을 때 일어나는 이벤트를 정의하는 곳
 
-This project is a starting point for a Flutter application.
+## 결과
 
-A few resources to get you started if this is your first Flutter project:
+### AppBar
+![img.png](img.png)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Drawer 위젯
+- drawer 위젯 클릭 시 이동
+![img_1.png](img_1.png)
+  
+## 사용된 위젯 정리
+![img_2.png](img_2.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

@@ -15,4 +15,4 @@
 - `/test06` : 컬럼 위젯(Column widget)과 로우 위젯(Row widget) 되짚어 보기(순한맛 강좌 21)
 - `/test07` : Navigator(네비게이터) 이해하기
 - `/test08` : 패치 강좌 2 : 플러터 2.0 버튼(Elevated button, Text Button, Outlined button)
-- `/StatefulWidget.md` : Stateful widget (조금 매운맛 강좌 1)
+- `/test09` : Stateful widget (조금 매운맛 강좌 1-2)

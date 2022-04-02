@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/cat_pose"
+            tools:src="@drawable/cat_pose"
             >
         </ImageView>
         <kr.co.bibbidi.android.kidsdrawingapp.DrawingView
@@ -135,12 +135,34 @@
             android:src="@drawable/ic_gallery"
             android:scaleType="fitXY" />
         <ImageButton
+            android:id="@+id/ib_undo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_undo"
+            android:scaleType="fitXY" />
+        <ImageButton
+            android:id="@+id/ib_redo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_redo"
+            android:scaleType="fitXY" />
+        <ImageButton
             android:id="@+id/ib_brush"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:src="@drawable/ic_brush"
             android:scaleType="fitXY" />
+        <ImageButton
+            android:id="@+id/ib_save"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_save"
+            android:scaleType="fitXY" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

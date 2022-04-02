@@ -18,9 +18,24 @@ class DrawingView(context: Context, attrs: AttributeSet): View(context, attrs) {
     private var color = Color.BLACK
     private var canvas: Canvas? = null
     private val mPaths = ArrayList<CustomPath>()
+    private val mUndoPahts = ArrayList<CustomPath>()
 
     init {
         setUpDrawing()
+    }
+
+    fun onClickUndo() {
+        if(mPaths.size > 0) {
+            mUndoPahts.add(mPaths.removeAt(mPaths.size - 1))
+            invalidate()
+        }
+    }
+
+    fun onClickRedo() {
+        if(mUndoPahts.size > 0) {
+            mPaths.add(mUndoPahts.removeAt(mUndoPahts.size - 1))
+            invalidate()
+        }
     }
 
     private fun setUpDrawing() {

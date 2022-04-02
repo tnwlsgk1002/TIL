@@ -68,20 +68,137 @@
 - PermissionsDemo 프로젝트 생성
 - `AndroidManifest.xml`에서 `<uses-permission android:name="android.permission.CAMERA"/>` 추가
   이 외에도 위치와 같은 권한을 해당 xml에서 요청 가능
+![img_6.png](img_6.png)
   
-
 ## 스낵바 - AlertDialog - 커스텀 다이얼로그 데모 파트
 - [스낵바와 토스트의 차이](https://stackoverflow.com/questions/34432339/android-snackbar-vs-toast-usage-and-difference)
-### Alert Dialog
-### 
-  
+### 카메라 권한 요청 화면
+![img_2.png](img_2.png)
 
-## 커스텀 실행 바 다이얼로그
+### 위치 권한 요청 화면
+![img_7.png](img_7.png)
+
+## 커스텀 다이얼로그
+### Alert Dialog 실행화면
+![img_3.png](img_3.png)
+
+### Custom Dialog 실행화면
+- ui, 버튼 등 바꾸고 싶을 때 사용
+![img_4.png](img_4.png)
+
+### Custom ProgressBar Dialog 실행화면
+- custom Dialog에 progressBar 추가
+![img_5.png](img_5.png)
+  
 ## 키즈드로잉 앱에 앱 권한 요청 추가하기
+- API 31 환경에서만 작동
+- `permission.READ_EXTERNAL_STORAGE` 권한 추가
+
 ## 갤러리에서 이미지 선택하여 백그라운드에 사용하기
+- `Intent()`로 다른화면 : 갤러리를 열어 이미지 선택
+- ImageView에 적용할 때는 `setImageURL()` 사용
+    URL : 기기 안의 위치, 브라우저 상의 경로 개념
+- 이미지 자체가 아닌 경로를 사용한다.
+
 ## 취소 버튼과 기능 추가하기
+- `DrawingView.kt`에 `fun onClickUndo()` 추가
+    mUndoPaths에 mPaths의 마지막 인덱스를 추가한 후, `onDraw()`를 재호출해야함
+  -> `onDraw()` 호출이 아닌 `invalidate()` 사용하여 내부로 onDraw를 불러옴
+  - 전체 페이지를 무효화
+
 ## 코루틴을 사용하여 백그라운드에서 무언가 해보기
+- 왜 `code routines`가 필요한가?
+안드로이드에서는 어떤 작업이 완료되는데 더 오랜 시간이 걸리고 작업이 완료될 때까지 ui가 차단
+  ui가 상호작용 x
+  사용자는 지루해지는 ... -> 안드로이드는 ui 시스템이 최대 5초까지 지연되도록 함
+  - onCreate()에서 버튼을 클릭하면 for문을 100000번 실행, Toast 메시지 출력하는 예제
+    -> 비추천 : coroutine을 사용하면 오래 걸리는 작업을 background의 다른 스레드로 넘겨서 ui 스레드가 차단되지 않고 계속 실행 -> 사용자가 막힘없이 앱을 사용할 수 있도록 만듦
+- Coroutines Notable Feature
+    - Light Weight
+      : 서스펜션의 지원으로 단일 스레드에서 많은 코루틴을 실행할 수 있음
+    - Fewer Memory Leaks
+      : 코루틴과 특정 스코프를 실행하면 스코프 끝에서 종료될 때 누출이 발생하지 않음
+    - Built in cancellation support
+      : launch 옵션은 실행 중인 코루틴을 취소하는데 사용할 수 있는 작업을 반환하고 JetPack에 통합한다.
+    - Jetpack Integration
+      : Jetpack Integration -> 번역이 약간 이상한 듯
+- Coroutine Scopes
+   - 코루틴을 실행하여 최종적으로 이 기능을 실행할 수 있는 스코프 내장
+   - but 코루틴 범위 필요, 스텐드 구조화 된 동시성의 원칙에 따라 최신 코루틴은 특정 코루틴 범위에서만 출시된다.
+   - 스코프를 생성한 후 마지막에 삭제 하지 않으면 메모리 누출 발생하니 주의
+   - viewModelScope
+        ```kotlin
+            viewModelScope.launch(Dispatchers.IO) {
+            try {  
+                val client = repository.getCharacters("1")
+                charactersLiveData.postValue(ScreenState.Success(client.result))
+            } catch (e:Exception) {
+                charactersLiveData.postValue(ScreenState.Error(e.message!!, null))
+            }
+        }
+        ```
+        - 뷰모델클래스에서 코루틴 실행시 사용
+        - 뷰모델이 지워지면 자동으로 취소
+   - lifecycleScope
+        ```kotlin
+        lifecycleScope.launch {
+            try {
+                val client = ApiClient.apiService.fetchCharacters("1")
+            } catch (e: Exception) {
+            
+            }
+        }
+        ```
+        - 액티비티나 fragment에서 코루틴을 실행시 사용
+        - 망가지면 자동으로 취소
+        - 라이프사이클이 중단되는 경우 메모리 누수가 발생 x -> good
+   - Custom scope
+        - 사용자 지정 범위를 만들 수도 있으나 실행이 완료되면 작업에 연결하고 지우는 것이 중요
+        - 액티비티에서 작업 변수를 만들려면 글로벌 작업 변수를 만들어서 코루틴 범위 생성, 작업 연결한 다음 실행
+        - 마지막으로 액티비티가 중단되면 작업을 취소
+        ```kotlin
+        private val job = Job()
+        CoroutlineScope(Dispatchers.IO + job).launch {
+            try {
+                val client = ApiClient.apiService.fetchCharacters("1")
+            } catch (e: Exception) {
+            
+            }
+        }
+        
+        override fun onDestroy() {
+            super.onDestroy()
+            job.cancel
+        }  
+        ```
+- 예제 : 백그라운드에서 for문 만 번 돌리면서 Log 찍은 다음 Toast 실행
+    - ktx 종속성 추가
+    - `lifecycleScope`를 이용해서 프로그레스 다이얼로그를 보여준 후 
+      코루틴 함수 호출, 코루틴 함수 안에서 `withContext()` 사용하여 for문 실행 및 `runOnUiThread` 사용
+    - 실행화면
+    ![img_9.png](img_9.png)
+    ![img_8.png](img_8.png)
+            
+     
 ## 공급자 추가하기 - 앱에 패스와 이미지 샌드위치 메이커 추가하기
+- 이미지 저장 -> 기기에 데이터를 출력해 이미지를 저장할 수 있도록 하는 권한 필요 -> WRITE 권한 추가
+- 기기가 데이터를 읽는 것 뿐만 아니라 쓰게 만들기
+    - `res/xml/path.xml` 추가
+    - `AndroidManifest.xml` 에 provider 추가
+
 ## 휴대폰에 있는 이미지를 코루틴과 출력스트림을 사용하여 저장하기
+- view를 Bitmap으로 저장 : `fun getBitmapFromView()`
+- Bitmap을 file로 저장 : `saveBitmapFile(mBitmap: Bitmap?)`
+  -> 리소스를 많이 사용 -> ui 스레드, 메인 스레드 x -> 코루틴 사용
+- 스토리지에서 읽을 수 있는 권한이 있는지 확인 : `fun isReadStorageAllowed()`
+- 프레임레이아웃을 전달하여 이미지를 저장
+
 ## 커스텀 실행 다이얼로그 반영하고 완료 후 숨기기
-## 이메일, 왓츠앱 등으로 이미지를 공유하는 공유 긴능 추가하기
+- `showProgressDialog()` & `cancelProgressDialog()` 추가
+- 저장 버튼 클릭 시 실행
+
+## 이메일, 왓츠앱 등으로 이미지를 공유하는 공유 기능 추가하기
+- 저장 후 `fun shareImage()` 호출
+
+## 실행 화면
+![img_10.png](img_10.png)
